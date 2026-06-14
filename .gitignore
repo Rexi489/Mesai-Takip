@@ -1,0 +1,29 @@
+# Kotlin compiler sessions
+.kotlin/
+
+# Gradle
+.gradle/
+build/
+**/build/
+*.hprof
+
+# Android
+local.properties
+*.keystore
+*.jks
+key.properties
+*.apk
+*.aab
+app/release/
+
+# IDE
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Room schema (opsiyonel - isterseniz commit edebilirsiniz)
+# app/schemas/
+
+# Navigation safe args generated
+app/src/main/java/**/direction/

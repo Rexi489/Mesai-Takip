@@ -1,0 +1,3 @@
+-keep class com.mesaihesap.app.data.local.entity.** { *; }
+-keep class com.mesaihesap.app.domain.model.** { *; }
+-keepattributes *Annotation*
