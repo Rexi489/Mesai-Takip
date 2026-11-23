@@ -7,7 +7,11 @@ import javax.inject.Inject
 
 class CalculateSalaryUseCase @Inject constructor() {
 
-    operator fun invoke(workDays: List<WorkDay>, settings: SalarySettings): MonthlySummary {
+    operator fun invoke(
+        workDays: List<WorkDay>,
+        settings: SalarySettings,
+        targetYearMonth: String? = null
+    ): MonthlySummary {
         val workedDays = workDays.count { it.isWorked }
         val totalHours = workDays.sumOf { it.workedHours }
         val overtimeHours = workDays.sumOf { it.overtimeHours }
@@ -24,7 +28,7 @@ class CalculateSalaryUseCase @Inject constructor() {
         val holidayPay = hr * holidayHours * settings.holidayMultiplier
         val nightShiftPay = settings.nightShiftBonus * nightShiftDays
 
-        val yearMonth = workDays.firstOrNull()?.date?.let {
+        val yearMonth = targetYearMonth ?: workDays.firstOrNull()?.date?.let {
             "${it.year}-${it.monthValue.toString().padStart(2, '0')}"
         } ?: ""
 

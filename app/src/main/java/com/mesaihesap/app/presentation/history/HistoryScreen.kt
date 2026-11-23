@@ -23,10 +23,13 @@ import com.mesaihesap.app.presentation.theme.WorkedGreen
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
+import androidx.compose.ui.platform.LocalContext
+
 @Composable
 fun HistoryScreen(viewModel: HistoryViewModel = hiltViewModel()) {
     val summaries by viewModel.summaries.collectAsState()
     val selectedDays by viewModel.selectedMonthDays.collectAsState()
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -65,6 +68,9 @@ fun HistoryScreen(viewModel: HistoryViewModel = hiltViewModel()) {
                     days = monthDays,
                     onClick = {
                         viewModel.selectMonth(if (expanded) null else summary.yearMonth)
+                    },
+                    onExportPdf = {
+                        viewModel.exportPdf(context, summary)
                     }
                 )
             }
@@ -77,7 +83,8 @@ private fun MonthHistoryCard(
     summary: MonthlySummary,
     expanded: Boolean,
     days: List<WorkDay>,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onExportPdf: () -> Unit
 ) {
     val monthLabel = try {
         val parts = summary.yearMonth.split("-")
@@ -108,18 +115,23 @@ private fun MonthHistoryCard(
                         if (summary.overtimeHours > 0) InfoChip("${String.format("%.1f", summary.overtimeHours)}h mesai")
                     }
                 }
-                Column(horizontalAlignment = Alignment.End) {
-                    Text(
-                        formatCurrency(summary.netSalary),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = WorkedGreen
-                    )
-                    Icon(
-                        if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
-                        null,
-                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-                    )
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Column(horizontalAlignment = Alignment.End) {
+                        Text(
+                            formatCurrency(summary.netSalary),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = WorkedGreen
+                        )
+                        Icon(
+                            if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+                            null,
+                            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        )
+                    }
+                    IconButton(onClick = onExportPdf) {
+                        Icon(Icons.Default.PictureAsPdf, contentDescription = "PDF Raporu", tint = MaterialTheme.colorScheme.primary)
+                    }
                 }
             }
 

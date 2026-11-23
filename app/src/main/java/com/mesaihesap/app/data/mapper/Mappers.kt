@@ -49,7 +49,8 @@ fun SalarySettingsEntity.toDomain() = SalarySettings(
     transportAllowance = transportAllowance, bonus = bonus, advance = advance,
     deductions = deductions, salaryDayOfMonth = salaryDayOfMonth,
     currency = currency, workplaceName = workplaceName,
-    defaultStartTime = defaultStartTime, defaultEndTime = defaultEndTime
+    defaultStartTime = defaultStartTime, defaultEndTime = defaultEndTime,
+    themeMode = themeMode
 )
 
 fun SalarySettings.toEntity() = SalarySettingsEntity(
@@ -61,5 +62,6 @@ fun SalarySettings.toEntity() = SalarySettingsEntity(
     transportAllowance = transportAllowance, bonus = bonus, advance = advance,
     deductions = deductions, salaryDayOfMonth = salaryDayOfMonth,
     currency = currency, workplaceName = workplaceName,
-    defaultStartTime = defaultStartTime, defaultEndTime = defaultEndTime
+    defaultStartTime = defaultStartTime, defaultEndTime = defaultEndTime,
+    themeMode = themeMode
 )

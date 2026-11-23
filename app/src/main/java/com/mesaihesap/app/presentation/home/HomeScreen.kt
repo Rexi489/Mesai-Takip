@@ -26,6 +26,8 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
+import androidx.compose.ui.platform.LocalContext
+
 @Composable
 fun HomeScreen(
     onNavigate: (String) -> Unit,
@@ -33,6 +35,7 @@ fun HomeScreen(
 ) {
     val summary by viewModel.summary.collectAsState()
     val currentYearMonth by viewModel.currentYearMonth.collectAsState()
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -45,7 +48,8 @@ fun HomeScreen(
             summary = summary,
             daysInMonth = viewModel.daysInMonth,
             onPrevious = { viewModel.previousMonth() },
-            onNext = { viewModel.nextMonth() }
+            onNext = { viewModel.nextMonth() },
+            onExportPdf = { viewModel.exportPdf(context) }
         )
 
         Spacer(Modifier.height(16.dp))
@@ -143,7 +147,8 @@ private fun HeaderCard(
     summary: MonthlySummary,
     daysInMonth: Int,
     onPrevious: () -> Unit,
-    onNext: () -> Unit
+    onNext: () -> Unit,
+    onExportPdf: () -> Unit
 ) {
     val monthName = yearMonth.format(DateTimeFormatter.ofPattern("MMMM yyyy", Locale("tr")))
         .replaceFirstChar { it.uppercase() }
@@ -161,17 +166,22 @@ private fun HeaderCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = onPrevious) {
-                    Icon(Icons.Default.ChevronLeft, null, tint = Color.White)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    IconButton(onClick = onPrevious) {
+                        Icon(Icons.Default.ChevronLeft, null, tint = Color.White)
+                    }
+                    Text(
+                        text = monthName,
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                    IconButton(onClick = onNext) {
+                        Icon(Icons.Default.ChevronRight, null, tint = Color.White)
+                    }
                 }
-                Text(
-                    text = monthName,
-                    color = Color.White,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
-                )
-                IconButton(onClick = onNext) {
-                    Icon(Icons.Default.ChevronRight, null, tint = Color.White)
+                IconButton(onClick = onExportPdf) {
+                    Icon(Icons.Default.PictureAsPdf, contentDescription = "PDF Raporu Al", tint = Color.White)
                 }
             }
 

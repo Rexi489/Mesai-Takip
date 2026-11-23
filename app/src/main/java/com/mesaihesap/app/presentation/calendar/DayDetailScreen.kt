@@ -73,8 +73,8 @@ fun DayDetailScreen(
                             day.copy(
                                 startTime = startTime.ifBlank { null },
                                 endTime = endTime.ifBlank { null },
-                                breakMinutes = breakMinutes.toIntOrNull() ?: 0,
-                                overtimeHours = overtimeHours.toDoubleOrNull() ?: 0.0,
+                                breakMinutes = breakMinutes.replace(',', '.').trim().toIntOrNull() ?: 0,
+                                overtimeHours = overtimeHours.replace(',', '.').trim().toDoubleOrNull() ?: 0.0,
                                 isSunday = isSunday,
                                 isHoliday = isHoliday,
                                 isNightShift = isNightShift,

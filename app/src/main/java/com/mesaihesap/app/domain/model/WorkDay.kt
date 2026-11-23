@@ -24,7 +24,9 @@ data class WorkDay(
             return try {
                 val (sh, sm) = startTime.split(":").map { it.toInt() }
                 val (eh, em) = endTime.split(":").map { it.toInt() }
-                val totalMinutes = (eh * 60 + em) - (sh * 60 + sm) - breakMinutes
+                var totalMinutes = (eh * 60 + em) - (sh * 60 + sm)
+                if (totalMinutes < 0) totalMinutes += 24 * 60
+                totalMinutes -= breakMinutes
                 if (totalMinutes > 0) totalMinutes / 60.0 else 0.0
             } catch (e: Exception) { 0.0 }
         }

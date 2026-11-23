@@ -19,7 +19,10 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): AppDatabase =
-        Room.databaseBuilder(context, AppDatabase::class.java, "mesai_hesap.db").build()
+        Room.databaseBuilder(context, AppDatabase::class.java, "mesai_hesap.db")
+            .addMigrations(AppDatabase.MIGRATION_1_2)
+            .fallbackToDestructiveMigration()
+            .build()
 
     @Provides
     fun provideWorkDayDao(db: AppDatabase): WorkDayDao = db.workDayDao()

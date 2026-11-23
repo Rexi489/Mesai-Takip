@@ -24,5 +24,6 @@ data class SalarySettingsEntity(
     val currency: String = "TRY",
     val workplaceName: String = "İş Yerim",
     val defaultStartTime: String = "08:30",
-    val defaultEndTime: String = "17:00"
+    val defaultEndTime: String = "17:00",
+    val themeMode: String = "SYSTEM"
 )

@@ -13,6 +13,10 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
+import android.content.Context
+import com.mesaihesap.app.util.PdfExporter
+import kotlinx.coroutines.launch
+
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
     private val workDayRepo: WorkDayRepository,
@@ -30,7 +34,7 @@ class HistoryViewModel @Inject constructor(
     ) { monthList, settings, allDays ->
         monthList.map { ym ->
             val days = allDays.filter { it.date.toString().startsWith(ym) }
-            calculateSalary(days, settings)
+            calculateSalary(days, settings, ym)
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
@@ -41,4 +45,13 @@ class HistoryViewModel @Inject constructor(
 
     fun selectMonth(ym: String?) { _selectedMonth.value = ym }
     fun isSelected(ym: String) = _selectedMonth.value == ym
+
+    fun exportPdf(context: Context, summary: MonthlySummary) {
+        viewModelScope.launch {
+            val days = workDayRepo.getWorkDaysByMonth(summary.yearMonth).first()
+            val settings = settingsRepo.getSettingsOnce()
+            val file = PdfExporter.export(context, summary, settings, days)
+            file?.let { PdfExporter.openPdf(context, it) }
+        }
+    }
 }

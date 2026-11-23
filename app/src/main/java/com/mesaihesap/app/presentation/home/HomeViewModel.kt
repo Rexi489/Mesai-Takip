@@ -14,6 +14,9 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
+import com.mesaihesap.app.util.PdfExporter
+import android.content.Context
+
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val workDayRepo: WorkDayRepository,
@@ -31,7 +34,7 @@ class HomeViewModel @Inject constructor(
         Pair(ym, settings)
     }.flatMapLatest { (ym, settings) ->
         val key = ym.format(DateTimeFormatter.ofPattern("yyyy-MM"))
-        workDayRepo.getWorkDaysByMonth(key).map { days -> calculateSalary(days, settings) }
+        workDayRepo.getWorkDaysByMonth(key).map { days -> calculateSalary(days, settings, key) }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), MonthlySummary(
         yearMonth = YearMonth.now().format(DateTimeFormatter.ofPattern("yyyy-MM"))
     ))
@@ -43,7 +46,17 @@ class HomeViewModel @Inject constructor(
     }
 
     fun nextMonth() {
-        val next = _currentYearMonth.value.plusMonths(1)
-        if (!next.isAfter(YearMonth.now())) _currentYearMonth.value = next
+        _currentYearMonth.value = _currentYearMonth.value.plusMonths(1)
+    }
+
+    fun exportPdf(context: Context) {
+        viewModelScope.launch {
+            val key = _currentYearMonth.value.format(DateTimeFormatter.ofPattern("yyyy-MM"))
+            val days = workDayRepo.getWorkDaysByMonth(key).first()
+            val settings = settingsRepo.getSettingsOnce()
+            val currentSummary = summary.value
+            val file = PdfExporter.export(context, currentSummary, settings, days)
+            file?.let { PdfExporter.openPdf(context, it) }
+        }
     }
 }

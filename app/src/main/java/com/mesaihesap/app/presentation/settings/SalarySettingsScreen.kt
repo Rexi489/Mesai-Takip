@@ -44,11 +44,11 @@ fun SalarySettingsScreen(
     var defaultEndTime by remember(settings) { mutableStateOf(settings.defaultEndTime) }
 
     val computedHourlyRate = if (useAutoHourlyRate) {
-        val s = monthlySalary.toDoubleOrNull() ?: 0.0
-        val d = monthlyWorkDays.toIntOrNull() ?: 26
-        val h = dailyHours.toDoubleOrNull() ?: 8.0
+        val s = monthlySalary.parseCleanDouble() ?: 0.0
+        val d = monthlyWorkDays.parseCleanInt() ?: 26
+        val h = dailyHours.parseCleanDouble() ?: 8.0
         if (d > 0 && h > 0) s / (d * h) else 0.0
-    } else manualHourlyRate.toDoubleOrNull() ?: 0.0
+    } else manualHourlyRate.parseCleanDouble() ?: 0.0
 
     Scaffold(
         topBar = {
@@ -61,21 +61,21 @@ fun SalarySettingsScreen(
             Button(
                 onClick = {
                     viewModel.save(SalarySettings(
-                        monthlySalary = monthlySalary.toDoubleOrNull() ?: 0.0,
-                        dailyHours = dailyHours.toDoubleOrNull() ?: 7.5,
-                        monthlyWorkDays = monthlyWorkDays.toIntOrNull() ?: 26,
+                        monthlySalary = monthlySalary.parseCleanDouble() ?: 0.0,
+                        dailyHours = dailyHours.parseCleanDouble() ?: 7.5,
+                        monthlyWorkDays = monthlyWorkDays.parseCleanInt() ?: 26,
                         useAutoHourlyRate = useAutoHourlyRate,
-                        manualHourlyRate = manualHourlyRate.toDoubleOrNull() ?: 0.0,
-                        overtimeMultiplier = overtimeMultiplier.toDoubleOrNull() ?: 1.5,
-                        sundayMultiplier = sundayMultiplier.toDoubleOrNull() ?: 1.5,
-                        holidayMultiplier = holidayMultiplier.toDoubleOrNull() ?: 2.0,
-                        nightShiftBonus = nightShiftBonus.toDoubleOrNull() ?: 0.0,
-                        mealAllowance = mealAllowance.toDoubleOrNull() ?: 0.0,
-                        transportAllowance = transportAllowance.toDoubleOrNull() ?: 0.0,
-                        bonus = bonus.toDoubleOrNull() ?: 0.0,
-                        advance = advance.toDoubleOrNull() ?: 0.0,
-                        deductions = deductions.toDoubleOrNull() ?: 0.0,
-                        salaryDayOfMonth = salaryDay.toIntOrNull() ?: 15,
+                        manualHourlyRate = manualHourlyRate.parseCleanDouble() ?: 0.0,
+                        overtimeMultiplier = overtimeMultiplier.parseCleanDouble() ?: 1.5,
+                        sundayMultiplier = sundayMultiplier.parseCleanDouble() ?: 1.5,
+                        holidayMultiplier = holidayMultiplier.parseCleanDouble() ?: 2.0,
+                        nightShiftBonus = nightShiftBonus.parseCleanDouble() ?: 0.0,
+                        mealAllowance = mealAllowance.parseCleanDouble() ?: 0.0,
+                        transportAllowance = transportAllowance.parseCleanDouble() ?: 0.0,
+                        bonus = bonus.parseCleanDouble() ?: 0.0,
+                        advance = advance.parseCleanDouble() ?: 0.0,
+                        deductions = deductions.parseCleanDouble() ?: 0.0,
+                        salaryDayOfMonth = salaryDay.parseCleanInt() ?: 15,
                         workplaceName = workplaceName,
                         defaultStartTime = defaultStartTime.ifBlank { "08:30" },
                         defaultEndTime = defaultEndTime.ifBlank { "17:00" }
@@ -167,3 +167,6 @@ private fun SettingTextField(
 }
 
 private fun Double.toFormattedString(): String = if (this == 0.0) "" else if (this == this.toLong().toDouble()) this.toLong().toString() else this.toString()
+
+private fun String.parseCleanDouble(): Double? = this.replace(',', '.').trim().toDoubleOrNull()
+private fun String.parseCleanInt(): Int? = this.replace(',', '.').trim().toIntOrNull()

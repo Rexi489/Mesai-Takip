@@ -27,3 +27,6 @@ Thumbs.db
 
 # Navigation safe args generated
 app/src/main/java/**/direction/
+.vs/
+bin/
+obj/

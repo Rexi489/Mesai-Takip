@@ -21,20 +21,34 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 
+import androidx.compose.ui.platform.LocalContext
+
 @Composable
 fun SettingsScreen(
     onSalarySettingsClick: () -> Unit,
     viewModel: SalarySettingsViewModel = hiltViewModel()
 ) {
     val settings by viewModel.settings.collectAsState()
+    val context = LocalContext.current
     var showDevDialog by remember { mutableStateOf(false) }
     var showAboutDialog by remember { mutableStateOf(false) }
+    var showThemeDialog by remember { mutableStateOf(false) }
 
     if (showDevDialog) {
         GeliştirmeDialog(onDismiss = { showDevDialog = false })
     }
     if (showAboutDialog) {
         HakkındaDialog(onDismiss = { showAboutDialog = false })
+    }
+    if (showThemeDialog) {
+        TemaSeçimDialog(
+            currentTheme = settings.themeMode,
+            onSelect = { mode ->
+                viewModel.save(settings.copy(themeMode = mode))
+                showThemeDialog = false
+            },
+            onDismiss = { showThemeDialog = false }
+        )
     }
 
     Column(
@@ -72,6 +86,17 @@ fun SettingsScreen(
         )
 
         SettingsGroupTitle("Uygulama")
+        val themeSubtitle = when (settings.themeMode) {
+            "LIGHT" -> "Açık Tema"
+            "DARK" -> "Karanlık Tema"
+            else -> "Sistem Varsayılanı"
+        }
+        SettingsItem(
+            icon = Icons.Default.Palette,
+            title = "Uygulama Teması",
+            subtitle = themeSubtitle,
+            onClick = { showThemeDialog = true }
+        )
         SettingsItem(
             icon = Icons.Default.Notifications,
             title = "Bildirimler",
@@ -89,9 +114,9 @@ fun SettingsScreen(
         SettingsItem(
             icon = Icons.Default.PictureAsPdf,
             title = "PDF Raporu",
-            subtitle = "Aylık maaş raporu oluştur",
-            inDevelopment = true,
-            onClick = { showDevDialog = true }
+            subtitle = "Bu ayın maaş ve mesai raporunu oluştur",
+            inDevelopment = false,
+            onClick = { viewModel.exportCurrentMonthPdf(context) }
         )
 
         SettingsGroupTitle("Güvenlik")
@@ -249,6 +274,47 @@ private fun GeliştirmeDialog(onDismiss: () -> Unit) {
             TextButton(onClick = onDismiss) {
                 Text("Tamam", fontWeight = FontWeight.Bold)
             }
+        }
+    )
+}
+
+@Composable
+private fun TemaSeçimDialog(
+    currentTheme: String,
+    onSelect: (String) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val options = listOf(
+        "SYSTEM" to "Sistem Varsayılanı",
+        "LIGHT" to "Açık Tema",
+        "DARK" to "Karanlık Tema"
+    )
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = { Icon(Icons.Default.Palette, null, tint = MaterialTheme.colorScheme.primary) },
+        title = { Text("Tema Seçimi", fontWeight = FontWeight.Bold, textAlign = TextAlign.Center) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                options.forEach { (mode, label) ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onSelect(mode) }
+                            .padding(vertical = 8.dp, horizontal = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(
+                            selected = (currentTheme == mode),
+                            onClick = { onSelect(mode) }
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text(label, style = MaterialTheme.typography.bodyMedium)
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) { Text("İptal") }
         }
     )
 }

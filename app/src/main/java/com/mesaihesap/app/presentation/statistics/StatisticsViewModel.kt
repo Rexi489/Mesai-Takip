@@ -36,7 +36,7 @@ class StatisticsViewModel @Inject constructor(
             val ym = now.minusMonths(offset.toLong())
             val key = ym.format(DateTimeFormatter.ofPattern("yyyy-MM"))
             val monthDays = days.filter { it.date.toString().startsWith(key) }
-            calculateSalary(monthDays, settings)
+            calculateSalary(monthDays, settings, key)
         }.reversed()
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
