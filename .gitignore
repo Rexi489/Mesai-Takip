@@ -16,11 +16,22 @@ key.properties
 *.aab
 app/release/
 
-# IDE
+# Firebase / Google Services (Google API ve proje yapılandırmaları)
+google-services.json
+
+# İmzalama ve Gizli Bilgiler (Signing & Credentials)
+keystore.properties
+secrets.properties
+*.secret
+.env
+
+# IDE & Visual Studio artık dosyaları
 .idea/
 *.iml
 .DS_Store
 Thumbs.db
+*.sln
+*.slnx
 
 # Room schema (opsiyonel - isterseniz commit edebilirsiniz)
 # app/schemas/
