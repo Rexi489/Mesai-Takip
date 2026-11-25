@@ -11,6 +11,7 @@
 - 🌙 **Açık & Karanlık Tema (Dark Mode)**: Göz yormayan modern Material 3 arayüzü, Sistem Varsayılanı, Açık veya Karanlık tema seçenekleri.
 - 📅 **İnteraktif Takvim**: Günlük çalışma saatleri, mola süreleri ve vardiya türlerini tek tıkla girme.
 - 📈 **İstatistikler & Geçmiş**: Haftalık çalışma saati grafiği, son 12 ayın maaş geçmişi ve genel özetler.
+- ☁️ **Veri Yedekleme ve Geri Yükleme**: Verilerinizi ve maaş ayarlarınızı JSON formatında dışa aktarma, paylaşma ve dosyadan geri yükleme.
 - 🔐 **Gizlilik ve Güvenlik**: Tüm veriler cihazınızda yerel SQLite (Room) veritabanında güvenle saklanır.
 
 ---
@@ -33,6 +34,7 @@
 - [x] **Aylık Maaş ve Mesai Hesaplama Motoru** (Otomatik/manuel saatlik ücret, katsayılar, prim, yol/yemek, avans/kesinti)
 - [x] **Aylık PDF Raporu Dışa Aktarma** (Tüm ayın her bir gününü içeren döküm, durum etiketleri ve doğrudan paylaşım)
 - [x] **Açık & Karanlık Tema (Dark Mode)** (Sistem Varsayılanı, Açık ve Karanlık tema seçimi ve veritabanı kalıcılığı)
+- [x] **Veri Yedekleme ve Geri Yükleme** (JSON formatında tüm kayıtları dışa aktarma, paylaşma ve dosyadan geri yükleme)
 - [x] **Gece Vardiyası ve Gece Yarısını Aşan Süre Hesabı** (Overnight shifts için doğru çalışma süresi hesabı)
 - [x] **Ondalık Sayı ve Klavye Uyum Özelliği** (Virgüllü/noktalı girişlerin düzgün işlenmesi)
 - [x] **İnteraktif Takvim ve Gün Detay Alanı** (Hızlı normal gün doldurma, çalışma saatleri, mola ve not alma)
@@ -44,7 +46,6 @@
 ## 🗺️ Yol Haritası ve Gelecek Planları (Roadmap / TODO)
 
 - [ ] 🔔 **Günlük ve Aylık Bildirim Hatırlatıcıları** (Günün sonunda mesai kaydı girme ve maaş günü hatırlatıcısı)
-- [ ] ☁️ **Veri Yedekleme ve Geri Yükleme** (JSON formatında dışa/içe aktarma, Google Drive yedekleme)
 - [ ] 🔒 **Uygulama Kilit Güvenliği** (Biyometrik Parmak İzi / Yüz Tanıma ve 4 haneli PIN kodu koruması)
 - [ ] 🏢 **Çoklu İş Yeri ve Vardiya Şablonları** (Birden fazla iş yeri tanımı ve hızlı vardiya saatleri seçimi)
 - [ ] 🌍 **Çoklu Dil Desteği** (İngilizce ve Almanca dil seçenekleri)
